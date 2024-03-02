@@ -1,8 +1,8 @@
 import os
 from datetime import timedelta, datetime
-from typing import Optional
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
+from promptdeploy.crud.users import get_user_from_db
 from sqlalchemy.orm import Session
 from jose import jwt, JWTError
 from promptdeploy.api.utils import get_db
@@ -26,7 +26,12 @@ def authenticate_user(db: Session, username: str, password: str):
     user = db.query(DBUser).filter(DBUser.email == username).first()
     if not (user and user.check_password(password)):
         return
-    return User(id=user.id, email=user.email, password="", is_active=user.is_active)
+    return User(
+        id=user.id,
+        email=user.email,
+        first_name=user.first_name,
+        last_name=user.last_name,
+    )
 
 
 def get_current_user(
@@ -34,7 +39,7 @@ def get_current_user(
 ) -> User:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: str = payload.get("sub")
+        user_id: str = payload.get("sub", "")
         if user_id is None:
             raise HTTPException(
                 status_code=401, detail="Invalid authentication credentials"
@@ -44,7 +49,11 @@ def get_current_user(
             status_code=401, detail="Invalid authentication credentials"
         )
 
-    user = db.query(DBUser).filter(DBUser.id == user_id).first()
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    return User(id=user.id, email=user.email, password="", is_active=user.is_active)
+    user = get_user_from_db(db, int(user_id))
+
+    return User(
+        id=user.id,
+        email=user.email,
+        first_name=user.first_name,
+        last_name=user.last_name,
+    )

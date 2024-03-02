@@ -19,14 +19,22 @@ interface AuthContextType {
     location: string
   ) => Promise<void>;
   logout: () => void;
+  register: (
+    username: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    location: string
+  ) => Promise<void>;
 }
 
 // Create a context with a default value that matches the AuthContextType
 const AuthContext = createContext<AuthContextType>({
   currentUser: null,
   loading: true,
-  login: async () => {}, // Provide an async empty function as placeholder
+  login: async () => {},
   logout: () => {},
+  register: async () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -104,8 +112,9 @@ export const AuthProvider: FunctionComponent<AuthProviderProps> = ({
     });
     const data = await response.json();
     if (response.ok) {
-      setCurrentUser({ email: data.user_email, id: data.user_id });
       sessionStorage.setItem("token", data.access_token); // Save the token
+      const user = await fetchUserDetails(data.access_token);
+      setCurrentUser({ email: user.email, id: user.id });
       navigate(location);
     } else {
       throw new Error(data.detail || "Login failed");
@@ -118,11 +127,41 @@ export const AuthProvider: FunctionComponent<AuthProviderProps> = ({
     navigate("/login");
   };
 
+  const register = async (
+    username: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    location: string = "/"
+  ) => {
+    if (!apiUrl) {
+      throw new Error("Backend API URL is not set");
+    }
+    const registerUrl = apiUrl + "/api/v1/register/";
+    const response = await fetch(registerUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: username,
+        password: password,
+        first_name: firstName,
+        last_name: lastName,
+      }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      login(username, password, location);
+    } else {
+      throw new Error(data.detail || "Login failed");
+    }
+  };
+
   const value = {
     currentUser,
     loading,
     login,
     logout,
+    register,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

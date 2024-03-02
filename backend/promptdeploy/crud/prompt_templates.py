@@ -2,11 +2,11 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from ..database.models import PromptTemplate
 from ..schemas.schemas import PromptTemplateCreate
-from .prompts import get_prompt
+from .prompts import get_prompt_from_db
 
 
-def create_prompt_template(db: Session, template: PromptTemplateCreate):
-    db_prompt = get_prompt(db, template.prompt_id)
+def create_prompt_template_in_db(db: Session, template: PromptTemplateCreate):
+    db_prompt = get_prompt_from_db(db, template.prompt_id)
     if not db_prompt:
         raise HTTPException(
             status_code=404,
@@ -20,7 +20,7 @@ def create_prompt_template(db: Session, template: PromptTemplateCreate):
     return db_template
 
 
-def get_latest_template(db: Session, prompt_id: int):
+def get_latest_template_from_db(db: Session, prompt_id: int):
     return (
         db.query(PromptTemplate)
         .filter(PromptTemplate.prompt_id == prompt_id)
@@ -29,5 +29,5 @@ def get_latest_template(db: Session, prompt_id: int):
     )
 
 
-def get_prompt_template(db: Session, template_id: int):
+def get_prompt_template_from_db(db: Session, template_id: int):
     return db.query(PromptTemplate).filter(PromptTemplate.id == template_id).first()

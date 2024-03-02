@@ -2,11 +2,16 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./Routes";
 import { AuthProvider } from "./AuthContext";
 import "@mantine/core/styles.css";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, createTheme } from "@mantine/core";
+
+const theme = createTheme({
+  fontFamily: "Montserrat, sans-serif",
+  defaultRadius: "md",
+});
 
 function App() {
   return (
-    <MantineProvider defaultColorScheme="dark">
+    <MantineProvider defaultColorScheme="dark" theme={theme}>
       <Router>
         <AuthProvider>
           <AppRoutes />
