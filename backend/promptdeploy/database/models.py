@@ -57,7 +57,7 @@ class Prompt(Base):
     deployment_uuid: Mapped[str] = mapped_column(
         String, default=create_endpoint_uuid, nullable=False
     )
-    deployed_template_id: Mapped[int] = mapped_column(Integer, nullable=True)
+    is_deployed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     templates = relationship("PromptTemplate", back_populates="prompt")
 

@@ -15,6 +15,8 @@ import {
   Stack,
   Center,
   Space,
+  Container,
+  Flex,
 } from "@mantine/core";
 
 export const LoginPage = (props: PaperProps) => {
@@ -78,7 +80,7 @@ export const LoginPage = (props: PaperProps) => {
   };
 
   return (
-    <Center>
+    <Flex align="center" justify="center" h="100vh">
       <Paper radius="md" p="xl" withBorder {...props}>
         <Text size="lg" fw={500}>
           Welcome to PromptDeploy!
@@ -162,7 +164,7 @@ export const LoginPage = (props: PaperProps) => {
           </Group>
         </form>
       </Paper>
-    </Center>
+    </Flex>
   );
 };
 

@@ -47,6 +47,7 @@ class Prompt(BaseModel):
     name: str
     description: Optional[str] = None
     variables: list
+    deployment_uuid: str
     created_at: datetime
     updated_at: datetime
 
