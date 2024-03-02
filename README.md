@@ -1,1 +1,2 @@
-# PromptDeploy - An easy, open source solution for managing your prompts
+# PromptDeploy
+## An easy, open source solution for managing and deploying your LLM prompts
