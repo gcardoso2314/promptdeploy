@@ -1,15 +1,27 @@
 import { useAuth } from "../AuthContext";
 
-import { AppShell, Burger } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  NavLink,
+  Text,
+  Button,
+  Group,
+  useMantineColorScheme,
+  ActionIcon,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { PromptGrid } from "../components/PromptGrid";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { IconHome2, IconMoonStars, IconSun } from "@tabler/icons-react";
 
 export const HomePage = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const [opened, { toggle }] = useDisclosure();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
 
   if (!currentUser) {
     useEffect(() => navigate("/login"), []);
@@ -27,11 +39,34 @@ export const HomePage = () => {
       padding="md"
     >
       <AppShell.Header>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        <div>PromptDeploy</div>
+        <Group justify="space-between" p="md">
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          <Text fw={500} fz={20}>
+            PromptDeploy
+          </Text>
+          <Group>
+            <ActionIcon
+              variant="outline"
+              color={dark ? "yellow" : "blue"}
+              onClick={() => toggleColorScheme()}
+              title="Toggle color scheme"
+            >
+              {dark ? <IconSun size={18} /> : <IconMoonStars size={18} />}
+            </ActionIcon>
+            <Button size="sm" onClick={logout}>
+              <Text>Logout</Text>
+            </Button>
+          </Group>
+        </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
+      <AppShell.Navbar p="md">
+        <NavLink
+          href="#required-for-focus"
+          label="My Prompts"
+          leftSection={<IconHome2 size="1rem" stroke={1.5} />}
+        />
+      </AppShell.Navbar>
 
       <AppShell.Main>
         <PromptGrid />
