@@ -1,0 +1,71 @@
+/* Reset margins and paddings */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+.header {
+  background-color: #333;
+  color: white;
+  padding: 10px 0;
+}
+
+.header .btn {
+  color: white;
+}
+
+.sidebar {
+  background-color: #f8f9fa;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  height: calc(100vh - 56px); /* Adjust based on header height */
+}
+
+.nav-link {
+  color: #333;
+  margin: 10px 0;
+}
+
+.nav-link:hover {
+  text-decoration: none;
+  color: #000;
+}
+
+/* Styling for the cards */
+.card {
+  margin: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.card-title {
+  color: #333;
+}
+
+/* Full-width columns on small screens */
+@media (max-width: 768px) {
+  .header .col,
+  .sidebar .nav-link,
+  .card-columns .card {
+    width: 100%;
+    text-align: center;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+}
+
+.collapsible-sidebar {
+  height: 100vh; /* Full height by default */
+}
+
+@media (max-width: 991.98px) { /* Bootstrap's lg breakpoint */
+  .collapsible-sidebar {
+    height: auto; /* Small height when navbar is collapsed */
+  }
+}
