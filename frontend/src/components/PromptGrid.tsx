@@ -4,6 +4,7 @@ import PromptCard from "./PromptCard";
 import PromptAddModal from "./PromptAddModal";
 import { fetchUserPrompts } from "../actions";
 import { camelizeKeys } from "humps";
+import { IconPlus } from "@tabler/icons-react";
 
 export const PromptGrid: FunctionComponent = () => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -45,8 +46,8 @@ export const PromptGrid: FunctionComponent = () => {
           />
         ))}
       </SimpleGrid>
-      <Button mt="md" onClick={() => setNewPromptModalVisible(true)}>
-        Add New Prompt
+      <Button mt="md" fullWidth onClick={() => setNewPromptModalVisible(true)}>
+        <IconPlus size={18} />Add New Prompt
       </Button>
       <PromptAddModal
         opened={newPromptModalVisible}

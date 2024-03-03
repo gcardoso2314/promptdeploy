@@ -50,8 +50,9 @@ export const HomePage = () => {
               color={dark ? "yellow" : "blue"}
               onClick={() => toggleColorScheme()}
               title="Toggle color scheme"
+              size="lg"
             >
-              {dark ? <IconSun size={18} /> : <IconMoonStars size={18} />}
+              {dark ? <IconSun size={20} /> : <IconMoonStars size={20} />}
             </ActionIcon>
             <Button size="sm" onClick={logout}>
               <Text>Logout</Text>

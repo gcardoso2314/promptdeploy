@@ -25,8 +25,9 @@ function PromptAddForm({ handleSuccess, handleFailure }: PromptAddFormProps) {
   const handleSubmit = async (values: { name: string, description: string, variables: string[] }, event?: React.FormEvent) => {
     event?.preventDefault();
     try {
+      const lowerCaseVars = values.variables.map(variable => variable.toLowerCase());
       console.log(`Adding new prompt: ${values.name} ${values.description} ${values.variables}`);
-      const newPrompt = await addNewPrompt(values.name, values.variables, values.description);
+      const newPrompt = await addNewPrompt(values.name, lowerCaseVars, values.description);
       handleSuccess(newPrompt);
     } catch (error) {
       handleFailure(Error(`Failed to create prompt ${name}: ${error}`));
