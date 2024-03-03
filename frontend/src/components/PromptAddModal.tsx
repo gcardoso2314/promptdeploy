@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Button, Paper, Text, Space } from "@mantine/core";
 import PromptAddForm from "./PromptAddForm";
 
 interface PromptAddModalProps {
-  show: boolean;
-  onHide: () => void;
+  opened: boolean;
+  onClose: () => void;
   onNewPrompt: (prompt: Prompt) => void;
 }
 
@@ -12,21 +12,17 @@ function PromptAddModal(props: PromptAddModalProps) {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   return (
     <Modal
-      show={props.show}
-      onHide={() => {
+      opened={props.opened}
+      onClose={() => {
         setFormSubmitted(false);
-        props.onHide();
+        props.onClose();
       }}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
+      title="Enter the details of your new prompt below"
     >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Create a new prompt
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+      <Paper radius="md" p="xl" withBorder {...props}>
         {formSubmitted && <h4>Your prompt has been successfully created</h4>}
         {!formSubmitted && (
           <PromptAddForm
@@ -40,7 +36,7 @@ function PromptAddModal(props: PromptAddModalProps) {
             }}
           />
         )}
-      </Modal.Body>
+      </Paper>
     </Modal>
   );
 }

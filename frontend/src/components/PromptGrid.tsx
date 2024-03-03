@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
+import { Text, SimpleGrid, Button } from "@mantine/core";
 import PromptCard from "./PromptCard";
-import { Button, Col, Row } from "react-bootstrap";
 import PromptAddModal from "./PromptAddModal";
 import { fetchUserPrompts } from "../actions";
 import { camelizeKeys } from "humps";
@@ -31,9 +31,9 @@ export const PromptGrid: FunctionComponent = () => {
   }, []); // Empty dependency array means this effect runs once on mount
   return (
     <>
-      {error && <Row>Something went wrong when loading prompts.</Row>}
-      {isLoading && <Row>Loading prompts...</Row>}
-      <Row>
+      {error && <Text>Something went wrong when loading prompts.</Text>}
+      {isLoading && <Text>Loading prompts...</Text>}
+      <SimpleGrid cols={3}>
         {prompts.map(prompt => (
           <PromptCard
             key={prompt.id}
@@ -41,19 +41,16 @@ export const PromptGrid: FunctionComponent = () => {
             name={prompt.name}
             description={prompt.description}
             createdAt={prompt.createdAt}
+            isDeployed={prompt.isDeployed}
           />
         ))}
-      </Row>
-      <Row className="justify-content-center">
-        <Col className="d-flex justify-content-center" md={9}>
-          <Button onClick={() => setNewPromptModalVisible(true)}>
-            Add New Prompt
-          </Button>
-        </Col>
-      </Row>
+      </SimpleGrid>
+      <Button mt="md" onClick={() => setNewPromptModalVisible(true)}>
+        Add New Prompt
+      </Button>
       <PromptAddModal
-        show={newPromptModalVisible}
-        onHide={() => setNewPromptModalVisible(false)}
+        opened={newPromptModalVisible}
+        onClose={() => setNewPromptModalVisible(false)}
         onNewPrompt={addNewPrompt}
       />
     </>

@@ -4,6 +4,7 @@ type Prompt = {
   description: string;
   createdAt: string;
   updatedAt: string;
+  isDeployed: boolean;
 };
 
 type PromptTemplate = {

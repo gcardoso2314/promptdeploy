@@ -24,6 +24,7 @@ const fetchUserPrompts = async (): Promise<Prompt[]> => {
 
 const addNewPrompt = async (
   name: string,
+  variables: string[],
   description: string
 ): Promise<Prompt> => {
   const token = sessionStorage.getItem("token");
@@ -35,7 +36,7 @@ const addNewPrompt = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ name, description }),
+      body: JSON.stringify({ name, variables, description }),
     });
     if (!response.ok) {
       throw new Error("Failed to fetch prompts.");

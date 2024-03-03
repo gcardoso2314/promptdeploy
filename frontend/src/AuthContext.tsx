@@ -32,9 +32,9 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   currentUser: null,
   loading: true,
-  login: async () => {},
-  logout: () => {},
-  register: async () => {},
+  login: async () => { },
+  logout: () => { },
+  register: async () => { },
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -84,6 +84,7 @@ export const AuthProvider: FunctionComponent<AuthProviderProps> = ({
           setLoading(false);
         } catch (error) {
           console.error("Error fetching user details:", error);
+          sessionStorage.removeItem("token");
           // Handle error, e.g., by logging out the user
         }
       } else {
