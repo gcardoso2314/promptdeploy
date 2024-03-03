@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
-import PromptEditPage from "./pages/PromptEditPage";
 import PrivateRoute from "./components/PrivateRoute";
 
 const AppRoutes = () => {
@@ -13,14 +12,6 @@ const AppRoutes = () => {
         element={
           <PrivateRoute>
             <HomePage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/prompt/:promptId"
-        element={
-          <PrivateRoute>
-            <PromptEditPage />
           </PrivateRoute>
         }
       />
