@@ -7,13 +7,14 @@ interface PromptCardProps {
   description: string;
   createdAt: string;
   isDeployed: boolean;
+  openEditDrawer: () => void;
 }
 
 export const PromptCard: FunctionComponent<PromptCardProps> = ({
-  id,
   name,
   description,
-  isDeployed
+  isDeployed,
+  openEditDrawer,
 }) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -32,7 +33,7 @@ export const PromptCard: FunctionComponent<PromptCardProps> = ({
         fullWidth
         mt="md"
         radius="md"
-        href={`/prompt/${id}`}
+        onClick={() => openEditDrawer()}
       >
         Edit
       </Button>
