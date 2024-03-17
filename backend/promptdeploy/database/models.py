@@ -10,6 +10,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, Mapped, mapped_column, DeclarativeBase
 from datetime import datetime
 import uuid
+import secrets
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -84,5 +85,9 @@ class ApiKeys(Base):
     key_suffix: Mapped[str] = mapped_column(String, nullable=False)
     hashed_key: Mapped[str] = mapped_column(String, nullable=False, index=True)
 
-    def set_key(self, key):
+    def create_key_hash(self, key):
+        self.key_suffix = key[-4:]
         self.hashed_key = generate_password_hash(key)
+
+    def check_key(self, key):
+        return check_password_hash(str(self.hashed_key), key)

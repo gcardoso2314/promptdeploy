@@ -19,6 +19,10 @@ def get_prompts_from_db(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Prompt).offset(skip).limit(limit).all()
 
 
+def get_prompt_by_uuid(db: Session, uuid: str):
+    return db.query(Prompt).filter(Prompt.deployment_uuid == uuid).first()
+
+
 def update_prompt_in_db(db: Session, prompt_id: int, prompt: PromptUpdate):
     db_prompt = db.query(Prompt).filter(Prompt.id == prompt_id).first()
     if db_prompt:

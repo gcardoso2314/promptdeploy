@@ -6,7 +6,12 @@ from sqlalchemy.orm import Session
 from promptdeploy.api.auth import authenticate_user, create_jwt_token, get_current_user
 
 from promptdeploy.api.utils import get_db
-from promptdeploy.api.v1.endpoints import prompts, prompt_templates
+from promptdeploy.api.v1.endpoints import (
+    prompts,
+    prompt_templates,
+    api_keys,
+    deployed_prompts,
+)
 from promptdeploy.schemas import schemas
 from promptdeploy.crud.users import create_user_in_db
 
@@ -22,6 +27,10 @@ api_router.include_router(
     prefix="/prompt_templates",
     tags=["Prompt Templates"],
     dependencies=[Depends(get_current_user)],
+)
+api_router.include_router(api_keys.router, prefix="/api_keys", tags=["API Keys"])
+api_router.include_router(
+    deployed_prompts.router, prefix="/deployed_prompts", tags=["Deployed Prompts"]
 )
 
 
