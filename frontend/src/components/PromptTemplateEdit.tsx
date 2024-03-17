@@ -1,6 +1,6 @@
-import { Box, Fieldset, TextInput, Text, Group, ActionIcon, TagsInput, Pill, Textarea, Button } from "@mantine/core"
+import { Box, Fieldset, TextInput, Text, Group, ActionIcon, TagsInput, Pill, Textarea, Button, rem, Notification } from "@mantine/core"
 import { useEffect, useState } from "react";
-import { IconEdit, IconDeviceFloppy } from "@tabler/icons-react";
+import { IconEdit, IconDeviceFloppy, IconX } from "@tabler/icons-react";
 import { updatePrompt, fetchLatestPromptTemplate, updatePromptTemplate } from "../actions";
 
 interface PromptTemplateEditProps {
@@ -19,6 +19,7 @@ function PromptTemplateEdit({ prompt }: PromptTemplateEditProps) {
     const [editName, setEditName] = useState(false);
     const [editDescription, setEditDescription] = useState(false);
     const [editVariables, setEditVariables] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchTemplate = async () => {
@@ -27,7 +28,11 @@ function PromptTemplateEdit({ prompt }: PromptTemplateEditProps) {
                 .catch(error => console.error(error));
         }
         fetchTemplate();
-    }, [])
+    }, [prompt])
+
+    const checkVariablesInTemplate = (variables: string[], template: string) => {
+        return variables.every(variable => template.includes(`{${variable}}`));
+    };
 
     const handleEditName = () => {
         prompt.name = name;
@@ -48,7 +53,12 @@ function PromptTemplateEdit({ prompt }: PromptTemplateEditProps) {
     }
 
     const handleUpdatePromptTemplate = () => {
-        updatePromptTemplate(prompt.id, template);
+        if (checkVariablesInTemplate(prompt.variables, template)) {
+            updatePromptTemplate(prompt.id, template);
+            setError(null);
+        } else {
+            setError("Template must include all variables specified in the prompt definition.")
+        }
     }
 
     const variablePills = prompt.variables.map(variable => <Pill key={variable} size="lg">{variable}</Pill>);
@@ -56,6 +66,8 @@ function PromptTemplateEdit({ prompt }: PromptTemplateEditProps) {
     const saveNameButton = <ActionIcon onClick={handleEditName} size="sm"><IconDeviceFloppy></IconDeviceFloppy></ActionIcon>;
     const saveDescriptionButton = <ActionIcon onClick={handleEditDescription} size="sm"><IconDeviceFloppy></IconDeviceFloppy></ActionIcon>;
     const saveVariablesButton = <ActionIcon onClick={handleEditVariables} size="sm"><IconDeviceFloppy></IconDeviceFloppy></ActionIcon>;
+
+    const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
     return (
         <Box>
@@ -75,6 +87,11 @@ function PromptTemplateEdit({ prompt }: PromptTemplateEditProps) {
                 </Group>
             </Fieldset>
             <Textarea value={template} onChange={event => setTemplate(event.currentTarget.value)} label="Prompt Template" autosize minRows={3} mt="md" />
+            {error && (
+                <Notification icon={xIcon} color="red" title="Oh no!" onClose={() => setError(null)}>
+                    {error}
+                </Notification>
+            )}
             <Button variant="primary" mt="md" onClick={handleUpdatePromptTemplate}>Save Prompt Template</Button>
         </Box>
     )
