@@ -73,3 +73,16 @@ class PromptTemplate(Base):
     prompt = relationship(
         "Prompt", back_populates="templates", foreign_keys=[prompt_id]
     )
+
+
+class ApiKeys(Base):
+    __tablename__ = "api_keys"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), index=True)
+    key_suffix: Mapped[str] = mapped_column(String, nullable=False)
+    hashed_key: Mapped[str] = mapped_column(String, nullable=False, index=True)
+
+    def set_key(self, key):
+        self.hashed_key = generate_password_hash(key)
