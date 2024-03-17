@@ -58,7 +58,7 @@ class PromptTemplateBase(BaseModel):
 
 
 class PromptTemplateCreate(PromptTemplateBase):
-    prompt_id: int
+    pass
 
 
 class PromptTemplateUpdate(PromptTemplateBase):

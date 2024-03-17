@@ -5,15 +5,17 @@ from ..schemas.schemas import PromptTemplateCreate
 from .prompts import get_prompt_from_db
 
 
-def create_prompt_template_in_db(db: Session, template: PromptTemplateCreate):
-    db_prompt = get_prompt_from_db(db, template.prompt_id)
+def create_prompt_template_in_db(
+    db: Session, prompt_id: int, template: PromptTemplateCreate
+):
+    db_prompt = get_prompt_from_db(db, prompt_id)
     if not db_prompt:
         raise HTTPException(
             status_code=404,
-            detail=f"Prompt with id {template.prompt_id} does not exist",
+            detail=f"Prompt with id {prompt_id} does not exist",
         )
 
-    db_template = PromptTemplate(**template.model_dump())
+    db_template = PromptTemplate(prompt_id=prompt_id, template=template.template)
     db.add(db_template)
     db.commit()
     db.refresh(db_template)
@@ -21,12 +23,18 @@ def create_prompt_template_in_db(db: Session, template: PromptTemplateCreate):
 
 
 def get_latest_template_from_db(db: Session, prompt_id: int):
-    return (
+    latest_template = (
         db.query(PromptTemplate)
         .filter(PromptTemplate.prompt_id == prompt_id)
         .order_by(PromptTemplate.created_at.desc())
         .first()
     )
+    if not latest_template:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No template found for prompt with id {prompt_id}",
+        )
+    return latest_template
 
 
 def get_prompt_template_from_db(db: Session, template_id: int):

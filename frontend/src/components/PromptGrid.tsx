@@ -6,6 +6,7 @@ import { fetchUserPrompts } from "../actions";
 import { camelizeKeys } from "humps";
 import { IconPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
+import PromptTemplateEdit from "./PromptTemplateEdit";
 
 export const PromptGrid: FunctionComponent = () => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -13,6 +14,7 @@ export const PromptGrid: FunctionComponent = () => {
   const [error, setError] = useState<string | null>(null);
   const [newPromptModalVisible, setNewPromptModalVisible] =
     useState<boolean>(false);
+  const [editPrompt, setEditPrompt] = useState<Prompt | null>(null);
   const [editPromptDrawerOpen, { open, close }] = useDisclosure(false);
 
   const addNewPrompt = (newPrompt: Prompt) => {
@@ -45,7 +47,7 @@ export const PromptGrid: FunctionComponent = () => {
             description={prompt.description}
             createdAt={prompt.createdAt}
             isDeployed={prompt.isDeployed}
-            openEditDrawer={open}
+            openEditDrawer={() => { setEditPrompt(prompt); open() }}
           />
         ))}
       </SimpleGrid>
@@ -57,8 +59,8 @@ export const PromptGrid: FunctionComponent = () => {
         onClose={() => setNewPromptModalVisible(false)}
         onNewPrompt={addNewPrompt}
       />
-      <Drawer opened={editPromptDrawerOpen} onClose={close} size="100%" title="Edit Prompt Template" transitionProps={{ duration: 500 }}>
-        {/* Drawer content */}
+      <Drawer opened={editPromptDrawerOpen} onClose={close} size="75%" title="Edit Prompt Template" transitionProps={{ duration: 500 }}>
+        <PromptTemplateEdit prompt={editPrompt} />
       </Drawer>
     </>
   );
