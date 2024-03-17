@@ -88,7 +88,7 @@ function PromptTemplateEdit({ prompt }: PromptTemplateEditProps) {
             </Fieldset>
             <Textarea value={template} onChange={event => setTemplate(event.currentTarget.value)} label="Prompt Template" autosize minRows={3} mt="md" />
             {error && (
-                <Notification icon={xIcon} color="red" title="Oh no!" onClose={() => setError(null)}>
+                <Notification mt="sm" icon={xIcon} color="red" title="Oh no!" onClose={() => setError(null)}>
                     {error}
                 </Notification>
             )}
