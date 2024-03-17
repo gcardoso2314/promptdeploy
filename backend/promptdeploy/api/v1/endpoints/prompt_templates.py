@@ -10,11 +10,11 @@ from promptdeploy.schemas.schemas import PromptTemplateCreate, PromptTemplate
 router = APIRouter()
 
 
-@router.post("/", response_model=PromptTemplate)
+@router.post("/{prompt_id}", response_model=PromptTemplate)
 def create_template_route(
-    template: PromptTemplateCreate, db: Session = Depends(get_db)
+    prompt_id: int, template: PromptTemplateCreate, db: Session = Depends(get_db)
 ):
-    return create_prompt_template_in_db(db=db, template=template)
+    return create_prompt_template_in_db(db=db, prompt_id=prompt_id, template=template)
 
 
 @router.get("/latest/{prompt_id}", response_model=PromptTemplate)

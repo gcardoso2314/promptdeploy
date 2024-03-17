@@ -120,10 +120,36 @@ const updatePrompt = async (
   }
 }
 
+const updatePromptTemplate = async (
+  promptId: number,
+  template: string
+): Promise<PromptTemplate> => {
+  const token = sessionStorage.getItem("token");
+  const promptTemplateUrl = `${apiUrl}/api/v1/prompt_templates/${promptId}`;
+  try {
+    const response = await fetch(promptTemplateUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ template }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update prompt template.");
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error updating prompt template:", error);
+    throw new Error("Failed to update prompt template.");
+  }
+}
+
 export {
   fetchUserPrompts,
   addNewPrompt,
   fetchPromptById,
   fetchLatestPromptTemplate,
-  updatePrompt
+  updatePrompt,
+  updatePromptTemplate,
 };
