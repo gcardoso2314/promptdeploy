@@ -14,3 +14,9 @@ type PromptTemplate = {
   template: string;
   createdAt: string;
 };
+
+type ApiKey = {
+  id: number;
+  name: string;
+  keySuffix: string;
+}

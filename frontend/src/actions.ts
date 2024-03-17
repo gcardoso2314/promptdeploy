@@ -145,6 +145,48 @@ const updatePromptTemplate = async (
   }
 }
 
+const fetchApiKeys = async (): Promise<ApiKey[]> => {
+  const apiKeysUrl = `${apiUrl}/api/v1/api_keys/`;
+  const token = sessionStorage.getItem("token");
+
+  try {
+    const response = await fetch(apiKeysUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch API keys.");
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching API keys:", error);
+    throw error;
+  }
+}
+
+const deleteApiKey = async (apiKeyId: number): Promise<void> => {
+  const token = sessionStorage.getItem("token");
+  const apiKeyUrl = `${apiUrl}/api/v1/api_keys/${apiKeyId}`;
+  try {
+    const response = await fetch(apiKeyUrl, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete API key.");
+    }
+  } catch (error) {
+    console.error("Error deleting API key:", error);
+    throw error;
+  }
+}
+
 export {
   fetchUserPrompts,
   addNewPrompt,
@@ -152,4 +194,6 @@ export {
   fetchLatestPromptTemplate,
   updatePrompt,
   updatePromptTemplate,
+  fetchApiKeys,
+  deleteApiKey
 };

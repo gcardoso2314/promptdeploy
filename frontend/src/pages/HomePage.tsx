@@ -13,8 +13,9 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { PromptGrid } from "../components/PromptGrid";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { IconHome2, IconMoonStars, IconSun } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { IconHome2, IconMoonStars, IconSun, IconKey } from "@tabler/icons-react";
+import { ApiKeysTable } from "../components/ApiKeysTable";
 
 export const HomePage = () => {
   const { currentUser, logout } = useAuth();
@@ -22,6 +23,7 @@ export const HomePage = () => {
   const [opened, { toggle }] = useDisclosure();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+  const [screen, setScreen] = useState("prompts");
 
   if (!currentUser) {
     useEffect(() => navigate("/login"), []);
@@ -63,14 +65,24 @@ export const HomePage = () => {
 
       <AppShell.Navbar p="md">
         <NavLink
-          href="#required-for-focus"
           label="My Prompts"
           leftSection={<IconHome2 size="1rem" stroke={1.5} />}
+          onClick={() => setScreen("prompts")}
+        />
+        <NavLink
+          label="API Keys"
+          leftSection={<IconKey size="1rem" stroke={1.5} />}
+          onClick={() => setScreen("apiKeys")}
         />
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <PromptGrid />
+        {
+          screen === "prompts" && <PromptGrid />
+        }
+        {
+          screen === "apiKeys" && <ApiKeysTable />
+        }
       </AppShell.Main>
     </AppShell>
   );

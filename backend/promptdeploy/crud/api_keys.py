@@ -44,3 +44,15 @@ def get_api_key(db: Session, api_key: str):
     for db_key in potential_keys:
         if db_key.check_key(api_key):
             return db_key
+
+
+def delete_api_key_in_db(db: Session, api_key_id: int, user_id: int):
+    db_api_key = (
+        db.query(models.ApiKeys)
+        .filter(models.ApiKeys.id == api_key_id, models.ApiKeys.user_id == user_id)
+        .first()
+    )
+    if not db_api_key:
+        raise HTTPException(status_code=400, detail="API Key not found")
+    db.delete(db_api_key)
+    db.commit()
