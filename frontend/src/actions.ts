@@ -167,6 +167,29 @@ const fetchApiKeys = async (): Promise<ApiKey[]> => {
   }
 }
 
+const createApiKey = async (name: string): Promise<CreateApiKeyResponse> => {
+  const token = sessionStorage.getItem("token");
+  const apiKeyUrl = `${apiUrl}/api/v1/api_keys/`;
+  try {
+    const response = await fetch(apiKeyUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to create API key.");
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error creating API key:", error);
+    throw error;
+  }
+
+}
+
 const deleteApiKey = async (apiKeyId: number): Promise<void> => {
   const token = sessionStorage.getItem("token");
   const apiKeyUrl = `${apiUrl}/api/v1/api_keys/${apiKeyId}`;
@@ -195,5 +218,6 @@ export {
   updatePrompt,
   updatePromptTemplate,
   fetchApiKeys,
-  deleteApiKey
+  deleteApiKey,
+  createApiKey,
 };

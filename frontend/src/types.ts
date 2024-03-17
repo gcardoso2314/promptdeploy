@@ -20,3 +20,7 @@ type ApiKey = {
   name: string;
   keySuffix: string;
 }
+
+type CreateApiKeyResponse = {
+  key: string;
+}
