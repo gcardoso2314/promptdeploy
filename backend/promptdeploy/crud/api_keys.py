@@ -35,7 +35,12 @@ def get_user_api_keys_in_db(db: Session, user_id: int) -> list[models.ApiKeys]:
 
 
 def get_api_key(db: Session, api_key: str):
-    all_api_keys = db.query(models.ApiKeys).all()
-    for db_key in all_api_keys:
+    api_key_suffix = api_key[-4:]
+    potential_keys = (
+        db.query(models.ApiKeys)
+        .filter(models.ApiKeys.key_suffix == api_key_suffix)
+        .all()
+    )
+    for db_key in potential_keys:
         if db_key.check_key(api_key):
             return db_key
