@@ -48,7 +48,7 @@ const addNewPrompt = async (
   }
 };
 
-const fetchPromptById = async (promptId: string): Promise<Prompt> => {
+const fetchPromptById = async (promptId: number): Promise<Prompt> => {
   const token = sessionStorage.getItem("token");
   const promptUrl = `${apiUrl}/api/v1/prompts/${promptId}`;
   try {
@@ -70,7 +70,7 @@ const fetchPromptById = async (promptId: string): Promise<Prompt> => {
 };
 
 const fetchLatestPromptTemplate = async (
-  promptId: string
+  promptId: number
 ): Promise<PromptTemplate> => {
   const token = sessionStorage.getItem("token");
   const promptTemplateUrl = `${apiUrl}/api/v1/prompt_templates/latest/${promptId}`;
@@ -92,9 +92,38 @@ const fetchLatestPromptTemplate = async (
   }
 };
 
+const updatePrompt = async (
+  prompt: Prompt
+): Promise<Prompt> => {
+  const token = sessionStorage.getItem("token");
+  const promptUrl = `${apiUrl}/api/v1/prompts/${prompt.id}`;
+  try {
+    const response = await fetch(promptUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: prompt.name,
+        variables: prompt.variables,
+        description: prompt.description
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update prompt.");
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error updating prompt:", error);
+    throw new Error("Failed to update prompt.");
+  }
+}
+
 export {
   fetchUserPrompts,
   addNewPrompt,
   fetchPromptById,
   fetchLatestPromptTemplate,
+  updatePrompt
 };

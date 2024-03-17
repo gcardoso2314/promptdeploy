@@ -59,7 +59,7 @@ export const PromptGrid: FunctionComponent = () => {
         onClose={() => setNewPromptModalVisible(false)}
         onNewPrompt={addNewPrompt}
       />
-      <Drawer opened={editPromptDrawerOpen} onClose={close} size="100%" title="Edit Prompt Template" transitionProps={{ duration: 500 }}>
+      <Drawer opened={editPromptDrawerOpen} onClose={close} size="75%" title="Edit Prompt Template" transitionProps={{ duration: 500 }}>
         <PromptTemplateEdit prompt={editPrompt} />
       </Drawer>
     </>
