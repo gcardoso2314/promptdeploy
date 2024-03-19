@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Button, Paper, Text, Space, Notification } from "@mantine/core";
+import { Modal, Button, Paper, Text, Space, Notification, Code } from "@mantine/core";
 import ApiKeyCreateForm from "./ApiKeyCreateForm";
 
 interface ApiCreateModalProps {
@@ -28,9 +28,8 @@ function ApiKeyCreateModal(props: ApiCreateModalProps) {
                 {apiKey && (
                     <>
                         <h4>Your API Key has been successfully created</h4>
-                        <Space h="md" />
                         <Text>Here is your new API Key. Please keep a record of it as you won't be able to recover it.</Text>
-                        <Text>{apiKey}</Text>
+                        <Code>{apiKey}</Code>
                         <Space h="md" />
                         <Button onClick={() => {
                             setApiKey("");
